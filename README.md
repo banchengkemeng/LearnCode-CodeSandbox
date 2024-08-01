@@ -13,6 +13,9 @@ LearnCode 代码沙箱
     </dependency>
     ```
     ```java
+    @Resource
+    private CodeSandboxExecutor codeSandboxExecutor;
+  
     @Test
     void testJudgeService() throws RuntimeException {
         String code = "import java.util.Scanner;\n" +
