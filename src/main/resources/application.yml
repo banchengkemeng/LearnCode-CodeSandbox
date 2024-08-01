@@ -1,0 +1,14 @@
+server:
+  port: 8180
+  servlet:
+    context-path: /api
+# 代码沙箱配置
+codesandbox:
+  type: remote
+  maxTimeLimit: 1000
+  maxMemoryLimit: 30
+  debug: false
+  docker:
+    host: tcp://192.168.67.129:2375
+    pool:
+      maxTotal: 10
