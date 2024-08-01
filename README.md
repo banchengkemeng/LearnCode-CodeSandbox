@@ -17,7 +17,7 @@ LearnCode 代码沙箱
     private CodeSandboxExecutor codeSandboxExecutor;
   
     @Test
-    void testJudgeService() throws RuntimeException {
+    void testCodeSandbox() {
         String code = "import java.util.Scanner;\n" +
                 "\n" +
                 "public class Main{\n" +
@@ -28,22 +28,22 @@ LearnCode 代码沙箱
                 "        System.out.println(i*i1);\n" +
                 "    }\n" +
                 "}";
-    
-        JudgeRequest judgeRequest = JudgeRequest.builder()
-                .questionId(1L)
-                .questionSubmitId(1818660044601491457L)
-                .lang("java")
-                .code(code)
-                .judgeConfig(new JudgeConfig(1000L, 1024L))
-                .judgeCase(Arrays.asList(
-                        new JudgeCase("1.in", "1.out"),
-                        new JudgeCase("2.in", "2.out"),
-                        new JudgeCase("3.in", "3.out")
-                ))
-                .build();
-    
-        JudgeInfo judgeInfo = judgeService.judgeQuestion(judgeRequest).get();
-        System.out.println(judgeInfo);
+        ExecutorRequest executorRequest = new ExecutorRequest(
+                code,
+                "java",
+                Arrays.asList(
+                        new InputArg(
+                                "1.in",
+                                "6 6"
+                        ),
+                        new InputArg(
+                                "2.in",
+                                "3 5"
+                        )
+                )
+        );
+        ExecutorResponse executorResponse = codeSandboxExecutor.exec(executorRequest);
+        Assertions.assertEquals(executorResponse.getMessage(), "执行成功");
     }
     ```
 - Restful API, 通过发送Http请求，使用代码执行接口
