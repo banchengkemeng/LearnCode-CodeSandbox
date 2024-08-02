@@ -1,6 +1,5 @@
 package site.notcoder.oji.ojicodesandbox;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.compiler.CompilerException;
 import cn.hutool.core.compiler.CompilerUtil;
 import cn.hutool.core.io.FileUtil;
@@ -12,17 +11,15 @@ import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import site.notcoder.oji.ojicodesandbox.config.CodeSandboxConfig;
-import site.notcoder.oji.ojicodesandbox.config.CodeSandboxDockerConfig;
+import site.notcoder.oji.ojicodesandbox.docker.pool.DockerClientFactory;
+import site.notcoder.oji.ojicodesandbox.docker.pool.DockerClientPool;
 import site.notcoder.oji.ojicodesandbox.factory.CodeSandbox;
 import site.notcoder.oji.ojicodesandbox.factory.CodeSandboxFactory;
 import site.notcoder.oji.ojicodesandbox.model.exec.SandboxExecResponse;
 import site.notcoder.oji.ojicodesandbox.model.sandbox.ExecutorRequest;
-import site.notcoder.oji.ojicodesandbox.docker.pool.DockerClientFactory;
-import site.notcoder.oji.ojicodesandbox.docker.pool.DockerClientPool;
 import site.notcoder.oji.ojicodesandbox.model.sandbox.ExecutorResponse;
 import site.notcoder.oji.ojicodesandbox.model.sandbox.InputArg;
 import site.notcoder.oji.ojicodesandbox.starter.CodeSandboxExecutor;
@@ -31,15 +28,10 @@ import site.notcoder.oji.ojicodesandbox.utils.DockerExecUtils;
 import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -231,7 +223,7 @@ public class OjiCodeSandboxApplicationTests {
     }
 
     @Test
-    void concurrent() throws Exception {
+    void concurrent() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setMaxPoolSize(50);
         threadPoolTaskExecutor.setCorePoolSize(20);
@@ -246,36 +238,33 @@ public class OjiCodeSandboxApplicationTests {
 
         for (int i = 0; i < 10; i++) {
             futures.add(
-                    threadPoolTaskExecutor.submit(new Callable<ExecutorResponse>() {
-                        @Override
-                        public ExecutorResponse call() throws Exception {
-                            String code = "import java.util.Scanner;\n" +
-                                    "\n" +
-                                    "public class Main{\n" +
-                                    "    public static void main(String[] args) {\n" +
-                                    "        Scanner scanner = new Scanner(System.in);\n" +
-                                    "        int i = scanner.nextInt();\n" +
-                                    "        int i1 = scanner.nextInt();\n" +
-                                    "        System.out.println(i*i1);\n" +
-                                    "    }\n" +
-                                    "}";
-                            ExecutorRequest executorRequest = new ExecutorRequest(
-                                    code,
-                                    "java",
-                                    Arrays.asList(
-                                            new InputArg(
-                                                    "1.txt",
-                                                    "6 6"
-                                            ),
-                                            new InputArg(
-                                                    "2.txt",
-                                                    "3 5"
-                                            )
-                                    )
-                            );
+                    threadPoolTaskExecutor.submit(() -> {
+                        String code = "import java.util.Scanner;\n" +
+                                "\n" +
+                                "public class Main{\n" +
+                                "    public static void main(String[] args) {\n" +
+                                "        Scanner scanner = new Scanner(System.in);\n" +
+                                "        int i = scanner.nextInt();\n" +
+                                "        int i1 = scanner.nextInt();\n" +
+                                "        System.out.println(i*i1);\n" +
+                                "    }\n" +
+                                "}";
+                        ExecutorRequest executorRequest = new ExecutorRequest(
+                                code,
+                                "java",
+                                Arrays.asList(
+                                        new InputArg(
+                                                "1.txt",
+                                                "6 6"
+                                        ),
+                                        new InputArg(
+                                                "2.txt",
+                                                "3 5"
+                                        )
+                                )
+                        );
 
-                            return codeSandboxExecutor.exec(executorRequest);
-                        }
+                        return codeSandboxExecutor.exec(executorRequest);
                     })
             );
         }

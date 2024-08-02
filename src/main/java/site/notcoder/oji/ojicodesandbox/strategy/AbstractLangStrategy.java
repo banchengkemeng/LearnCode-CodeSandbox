@@ -1,7 +1,6 @@
 package site.notcoder.oji.ojicodesandbox.strategy;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import site.notcoder.oji.ojicodesandbox.config.CodeSandboxConfig;
 import site.notcoder.oji.ojicodesandbox.exception.CodeSandboxExceptions;
 import site.notcoder.oji.ojicodesandbox.model.sandbox.CompileInfo;

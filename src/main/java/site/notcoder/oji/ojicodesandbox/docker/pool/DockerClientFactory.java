@@ -7,10 +7,8 @@ import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import site.notcoder.oji.ojicodesandbox.config.CodeSandboxConfig;
-import site.notcoder.oji.ojicodesandbox.config.CodeSandboxDockerConfig;
 
 import javax.annotation.Resource;
 

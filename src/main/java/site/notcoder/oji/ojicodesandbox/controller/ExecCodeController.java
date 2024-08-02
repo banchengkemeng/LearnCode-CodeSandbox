@@ -1,7 +1,6 @@
 package site.notcoder.oji.ojicodesandbox.controller;
 
 import cn.hutool.core.codec.Base64;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

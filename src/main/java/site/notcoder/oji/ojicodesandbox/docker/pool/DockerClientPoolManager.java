@@ -2,10 +2,8 @@ package site.notcoder.oji.ojicodesandbox.docker.pool;
 
 import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import site.notcoder.oji.ojicodesandbox.config.CodeSandboxConfig;
-import site.notcoder.oji.ojicodesandbox.config.CodeSandboxDockerConfig;
 
 import javax.annotation.Resource;
 
